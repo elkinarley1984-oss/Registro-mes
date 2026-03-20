@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a0a14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Luna">
+<title>Luna — Ciclo Menstrual</title>
+
+<!-- PWA Icon (SVG inline as data URI) -->
+<script>
+(function(){
+  // Generate the icon SVG as a data URI and inject all link tags
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <defs>
+      <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+        <stop offset="0%" stop-color="#2a0d2e"/>
+        <stop offset="100%" stop-color="#0e0610"/>
+      </radialGradient>
+      <radialGradient id="moonGlow" cx="38%" cy="35%" r="55%">
+        <stop offset="0%" stop-color="#f5e0ee"/>
+        <stop offset="40%" stop-color="#e8628a"/>
+        <stop offset="75%" stop-color="#c43060"/>
+        <stop offset="100%" stop-color="#7a1535"/>
+      </radialGradient>
+      <radialGradient id="glowHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#e8628a" stop-opacity="0.4"/>
+        <stop offset="100%" stop-color="#e8628a" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="8" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softglow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Background rounded rect -->
+    <rect width="512" height="512" rx="110" fill="url(#bg)"/>
+
+    <!-- Outer glow halo -->
+    <circle cx="256" cy="248" r="160" fill="url(#glowHalo)"/>
+
+    <!-- Orbit ring -->
+    <circle cx="256" cy="248" r="148" fill="none" stroke="#e8628a" stroke-width="1.2" stroke-opacity="0.35" stroke-dasharray="6 10"/>
+
+    <!-- Moon body -->
+    <circle cx="256" cy="248" r="108" fill="url(#moonGlow)" filter="url(#glow)"/>
+
+    <!-- Moon shadow overlay (crescent effect) -->
+    <circle cx="300" cy="230" r="85" fill="#0e0610" opacity="0.45"/>
+
+    <!-- Sparkle top-right -->
+    <g filter="url(#softglow)" fill="#f0c0d8">
+      <polygon points="390,108 394,120 406,124 394,128 390,140 386,128 374,124 386,120" opacity="0.9"/>
+    </g>
+    <!-- Sparkle small left -->
+    <g filter="url(#softglow)" fill="#e8628a">
+      <polygon points="118,195 121,203 129,206 121,209 118,217 115,209 107,206 115,203" opacity="0.75"/>
+    </g>
+    <!-- Dot accent top -->
+    <circle cx="330" cy="82" r="5" fill="#e8628a" opacity="0.6" filter="url(#softglow)"/>
+    <circle cx="355" cy="95" r="3" fill="#f0c0d8" opacity="0.5"/>
+    <circle cx="165" cy="390" r="4" fill="#c490d1" opacity="0.5"/>
+    <circle cx="142" cy="375" r="2.5" fill="#e8628a" opacity="0.4"/>
+
+    <!-- Orbit dot on ring -->
+    <circle cx="256" cy="100" r="7" fill="#e8628a" opacity="0.9" filter="url(#softglow)"/>
+
+    <!-- Text: LUNA -->
+    <text x="256" y="422" text-anchor="middle"
+      font-family="Georgia, serif" font-size="52" font-weight="300"
+      fill="#f0c8dc" letter-spacing="14" opacity="0.95">LUNA</text>
+
+    <!-- Tiny dots below text -->
+    <circle cx="220" cy="442" r="2.5" fill="#e8628a" opacity="0.5"/>
+    <circle cx="256" cy="442" r="2.5" fill="#e8628a" opacity="0.5"/>
+    <circle cx="292" cy="442" r="2.5" fill="#e8628a" opacity="0.5"/>
+  </svg>`;
+
+  const encoded = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+
+  // Inject link tags
+  const sizes = [192, 512];
+  sizes.forEach(s => {
+    const link = document.createElement('link');
+    link.rel = 'apple-touch-icon';
+    link.sizes = s + 'x' + s;
+    link.href = encoded;
+    document.head.appendChild(link);
+  });
+
+  const iconLink = document.createElement('link');
+  iconLink.rel = 'icon';
+  iconLink.type = 'image/svg+xml';
+  iconLink.href = encoded;
+  document.head.appendChild(iconLink);
+
+  // Inject manifest dynamically
+  const manifest = {
+    name: "Luna — Ciclo Menstrual",
+    short_name: "Luna",
+    description: "Registra y predice tu ciclo menstrual",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#0e0610",
+    theme_color: "#1a0a14",
+    orientation: "portrait",
+    icons: [
+      { src: encoded, sizes: "192x192", type: "image/svg+xml" },
+      { src: encoded, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+    ]
+  };
+
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+  const manifestURL = URL.createObjectURL(blob);
+  const ml = document.createElement('link');
+  ml.rel = 'manifest';
+  ml.href = manifestURL;
+  document.head.appendChild(ml);
+})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0610;
+    --bg2: #160c1a;
+    --surface: #1e1025;
+    --surface2: #271530;
+    --border: rgba(220,100,160,0.15);
+    --rose: #e8628a;
+    --rose-light: #f0a0be;
+    --rose-deep: #c43060;
+    --lavender: #c490d1;
+    --gold: #e8c97a;
+    --text: #f5e8ef;
+    --text2: #c4a8b8;
+    --text3: #8a6878;
+    --glow: rgba(232,98,138,0.3);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: -20%;
+    width: 80vw;
+    height: 80vw;
+    background: radial-gradient(circle, rgba(180,60,120,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -20%;
+    right: -20%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(100,60,180,0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Header ── */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 20px 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    color: var(--rose-light);
+  }
+
+  .logo span {
+    color: var(--rose);
+    font-style: italic;
+  }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(14,6,16,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0 max(12px, env(safe-area-inset-bottom));
+  }
+
+  .nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 6px 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn.active {
+    color: var(--rose);
+  }
+
+  .nav-btn .icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* ── Pages ── */
+  .page {
+    display: none;
+    padding: 20px 20px 100px;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.4s ease;
+  }
+
+  .page.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Moon Phase Display ── */
+  .moon-section {
+    text-align: center;
+    padding: 30px 0 20px;
+  }
+
+  .moon-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  .moon-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #f5e8ef, var(--rose-light), var(--rose), var(--rose-deep));
+    box-shadow:
+      0 0 40px var(--glow),
+      0 0 80px rgba(232,98,138,0.15),
+      inset -10px -10px 30px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    animation: moonPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes moonPulse {
+    0%, 100% { box-shadow: 0 0 40px var(--glow), 0 0 80px rgba(232,98,138,0.15), inset -10px -10px 30px rgba(0,0,0,0.4); }
+    50% { box-shadow: 0 0 60px var(--glow), 0 0 120px rgba(232,98,138,0.25), inset -10px -10px 30px rgba(0,0,0,0.4); }
+  }
+
+  .moon-ring {
+    position: absolute;
+    inset: -15px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,98,138,0.25);
+    animation: ringRotate 20s linear infinite;
+  }
+
+  .moon-ring::before {
+    content: '✦';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--rose);
+    font-size: 10px;
+  }
+
+  @keyframes ringRotate { to { transform: rotate(360deg); } }
+
+  .phase-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--rose-light);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .phase-sub {
+    font-size: 13px;
+    color: var(--text2);
+    letter-spacing: 1px;
+  }
+
+  /* ── Status Cards ── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--rose), transparent);
+    opacity: 0.6;
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--rose-light);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--rose-deep), var(--rose));
+    border: none;
+    border-radius: 16px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin: 10px 0;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 24px rgba(196,48,96,0.35);
+  }
+
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    color: var(--rose-light);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin: 6px 0;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:active { background: var(--surface); }
+
+  /* ── Section Title ── */
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 1px;
+    margin: 24px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Calendar ── */
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .cal-nav {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rose);
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .cal-month {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .cal-weekday {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 0;
+  }
+
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .cal-day:active { transform: scale(0.9); }
+
+  .cal-day.today {
+    color: var(--rose);
+    font-weight: 500;
+  }
+
+  .cal-day.today::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--rose);
+  }
+
+  .cal-day.period {
+    background: linear-gradient(135deg, rgba(196,48,96,0.6), rgba(232,98,138,0.6));
+    color: white;
+    box-shadow: 0 2px 8px rgba(232,98,138,0.3);
+  }
+
+  .cal-day.ovulation {
+    background: rgba(196,144,209,0.3);
+    color: var(--lavender);
+    border: 1px solid rgba(196,144,209,0.4);
+  }
+
+  .cal-day.fertile {
+    background: rgba(232,201,122,0.15);
+    color: var(--gold);
+  }
+
+  .cal-day.other-month { opacity: 0.25; }
+
+  .cal-day.selected {
+    outline: 2px solid var(--rose);
+    outline-offset: 1px;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* ── Log Entry Form ── */
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .form-control {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-control:focus { border-color: rgba(232,98,138,0.5); }
+
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .chip.selected {
+    background: rgba(232,98,138,0.2);
+    border-color: var(--rose);
+    color: var(--rose-light);
+  }
+
+  /* ── History List ── */
+  .history-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .history-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--rose-deep), var(--rose));
+    border-radius: 3px 0 0 3px;
+  }
+
+  .history-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--rose-light);
+    margin-bottom: 4px;
+  }
+
+  .history-meta {
+    font-size: 12px;
+    color: var(--text3);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .history-tag {
+    background: rgba(232,98,138,0.1);
+    border: 1px solid rgba(232,98,138,0.2);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: var(--rose-light);
+  }
+
+  /* ── Next Prediction Card ── */
+  .prediction-card {
+    background: linear-gradient(135deg, rgba(196,48,96,0.15), rgba(100,40,140,0.15));
+    border: 1px solid rgba(232,98,138,0.25);
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .prediction-card::before {
+    content: '◈';
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    font-size: 40px;
+    color: rgba(232,98,138,0.1);
+  }
+
+  .prediction-title {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+
+  .prediction-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: var(--rose-light);
+    font-weight: 300;
+    margin-bottom: 4px;
+  }
+
+  .prediction-days {
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 13px;
+    color: var(--text);
+    z-index: 999;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+
+  /* ── Flow selector ── */
+  .flow-selector {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0;
+  }
+
+  .flow-btn {
+    flex: 1;
+    padding: 12px 6px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .flow-btn .dot {
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .flow-btn.sel {
+    background: rgba(232,98,138,0.15);
+    border-color: var(--rose);
+    color: var(--rose-light);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text3);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+  }
+
+  .empty-state .emoji { font-size: 40px; margin-bottom: 12px; display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>Luna</span> ✦ Ciclo</div>
+  <div style="font-size:11px;color:var(--text3);letter-spacing:1px;" id="headerDate"></div>
+</header>
+
+<!-- PÁGINA INICIO -->
+<div class="page active" id="page-home">
+  <div class="moon-section">
+    <div class="moon-container">
+      <div class="moon-circle" id="moonIcon">🌙</div>
+      <div class="moon-ring"></div>
+    </div>
+    <div class="phase-label" id="phaseLabel">Sin datos aún</div>
+    <div class="phase-sub" id="phaseSub">Registra tu primer ciclo</div>
+  </div>
+
+  <div id="predictionCard" style="display:none" class="prediction-card">
+    <div class="prediction-title">🌸 Próximo periodo estimado</div>
+    <div class="prediction-date" id="nextPeriodDate">—</div>
+    <div class="prediction-days" id="nextPeriodDays"></div>
+  </div>
+
+  <div class="status-grid">
+    <div class="stat-card">
+      <div class="stat-number" id="dayOfCycle">—</div>
+      <div class="stat-label">Día del ciclo</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="cycleLength">—</div>
+      <div class="stat-label">Duración media</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="periodDuration">—</div>
+      <div class="stat-label">Días de periodo</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="totalRegistros">0</div>
+      <div class="stat-label">Registros</div>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="showPage('page-log')">＋ Registrar periodo</button>
+  <button class="btn-secondary" onclick="showPage('page-calendar')">Ver calendario</button>
+</div>
+
+<!-- PÁGINA REGISTRAR -->
+<div class="page" id="page-log">
+  <div class="section-title">🌹 Registrar</div>
+
+  <div class="form-group">
+    <label class="form-label">Fecha de inicio</label>
+    <input type="date" class="form-control" id="logStartDate">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Fecha de fin (opcional)</label>
+    <input type="date" class="form-control" id="logEndDate">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Intensidad del flujo</label>
+    <div class="flow-selector">
+      <div class="flow-btn" onclick="selectFlow('ligero')" id="flow-ligero">
+        <div class="dot" style="width:6px;height:6px"></div>
+        Ligero
+      </div>
+      <div class="flow-btn" onclick="selectFlow('normal')" id="flow-normal">
+        <div class="dot" style="width:9px;height:9px"></div>
+        Normal
+      </div>
+      <div class="flow-btn" onclick="selectFlow('intenso')" id="flow-intenso">
+        <div class="dot" style="width:13px;height:13px"></div>
+        Intenso
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Síntomas</label>
+    <div class="chip-group" id="symptomsGroup">
+      <div class="chip" onclick="toggleChip(this)">😣 Cólicos</div>
+      <div class="chip" onclick="toggleChip(this)">🤕 Dolor de cabeza</div>
+      <div class="chip" onclick="toggleChip(this)">😔 Cambios de humor</div>
+      <div class="chip" onclick="toggleChip(this)">😩 Fatiga</div>
+      <div class="chip" onclick="toggleChip(this)">🤢 Náuseas</div>
+      <div class="chip" onclick="toggleChip(this)">🎈 Hinchazón</div>
+      <div class="chip" onclick="toggleChip(this)">🦵 Dolor lumbar</div>
+      <div class="chip" onclick="toggleChip(this)">😴 Insomnio</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Notas (opcional)</label>
+    <textarea class="form-control" id="logNotes" rows="3" placeholder="Cómo te sentiste..."></textarea>
+  </div>
+
+  <button class="btn-primary" onclick="saveLog()">Guardar registro</button>
+  <button class="btn-secondary" onclick="showPage('page-home')">Cancelar</button>
+</div>
+
+<!-- PÁGINA CALENDARIO -->
+<div class="page" id="page-calendar">
+  <div class="calendar-header">
+    <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+    <div class="cal-month" id="calMonthTitle"></div>
+    <button class="cal-nav" onclick="changeMonth(1)">›</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:linear-gradient(135deg,#c43060,#e8628a)"></div>
+      Periodo
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:rgba(232,201,122,0.5)"></div>
+      Fértil
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:rgba(196,144,209,0.5)"></div>
+      Ovulación
+    </div>
+  </div>
+
+  <div class="cal-grid" id="calGrid"></div>
+</div>
+
+<!-- PÁGINA HISTORIAL -->
+<div class="page" id="page-history">
+  <div class="section-title">📋 Historial</div>
+  <div id="historyList"></div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <button class="nav-btn active" onclick="showPage('page-home')" id="nav-home">
+    <span class="icon">🌙</span>Inicio
+  </button>
+  <button class="nav-btn" onclick="showPage('page-log')" id="nav-log">
+    <span class="icon">＋</span>Registrar
+  </button>
+  <button class="nav-btn" onclick="showPage('page-calendar')" id="nav-calendar">
+    <span class="icon">📅</span>Calendario
+  </button>
+  <button class="nav-btn" onclick="showPage('page-history')" id="nav-history">
+    <span class="icon">📋</span>Historial
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── State ──
+  let logs = JSON.parse(localStorage.getItem('luna_logs') || '[]');
+  let calYear, calMonth;
+  let selectedFlow = 'normal';
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  calYear = today.getFullYear();
+  calMonth = today.getMonth();
+
+  // ── Init ──
+  document.getElementById('headerDate').textContent =
+    today.toLocaleDateString('es-ES', { weekday:'short', day:'numeric', month:'short' }).toUpperCase();
+
+  document.getElementById('logStartDate').value = toInputDate(today);
+
+  selectFlow('normal');
+  updateHome();
+
+  // ── Navigation ──
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const nav = document.getElementById('nav-' + id.replace('page-',''));
+    if (nav) nav.classList.add('active');
+    if (id === 'page-calendar') renderCalendar();
+    if (id === 'page-history') renderHistory();
+  }
+
+  // ── Flow ──
+  function selectFlow(f) {
+    selectedFlow = f;
+    ['ligero','normal','intenso'].forEach(x => {
+      document.getElementById('flow-' + x).classList.toggle('sel', x === f);
+    });
+  }
+
+  // ── Chips ──
+  function toggleChip(el) { el.classList.toggle('selected'); }
+
+  function getSelectedChips() {
+    return [...document.querySelectorAll('#symptomsGroup .chip.selected')]
+      .map(c => c.textContent.trim());
+  }
+
+  // ── Save Log ──
+  function saveLog() {
+    const start = document.getElementById('logStartDate').value;
+    if (!start) { showToast('⚠️ Ingresa la fecha de inicio'); return; }
+
+    const end = document.getElementById('logEndDate').value;
+    const notes = document.getElementById('logNotes').value.trim();
+    const symptoms = getSelectedChips();
+
+    logs.push({ id: Date.now(), start, end: end || null, flow: selectedFlow, symptoms, notes });
+    logs.sort((a,b) => a.start.localeCompare(b.start));
+    save();
+
+    // Reset
+    document.getElementById('logEndDate').value = '';
+    document.getElementById('logNotes').value = '';
+    document.querySelectorAll('#symptomsGroup .chip').forEach(c => c.classList.remove('selected'));
+    selectFlow('normal');
+
+    showToast('✨ Registro guardado');
+    showPage('page-home');
+  }
+
+  // ── Update Home ──
+  function updateHome() {
+    document.getElementById('totalRegistros').textContent = logs.length;
+
+    if (logs.length === 0) {
+      document.getElementById('dayOfCycle').textContent = '—';
+      document.getElementById('cycleLength').textContent = '—';
+      document.getElementById('periodDuration').textContent = '—';
+      document.getElementById('predictionCard').style.display = 'none';
+      return;
+    }
+
+    const last = logs[logs.length - 1];
+    const lastStart = parseDate(last.start);
+    const dayOfCycle = Math.floor((today - lastStart) / 86400000) + 1;
+    document.getElementById('dayOfCycle').textContent = dayOfCycle > 0 ? dayOfCycle : '—';
+
+    // Average cycle
+    if (logs.length >= 2) {
+      let total = 0, count = 0;
+      for (let i = 1; i < logs.length; i++) {
+        const diff = (parseDate(logs[i].start) - parseDate(logs[i-1].start)) / 86400000;
+        if (diff > 14 && diff < 50) { total += diff; count++; }
+      }
+      const avg = count > 0 ? Math.round(total / count) : 28;
+      document.getElementById('cycleLength').textContent = avg + 'd';
+
+      // Prediction
+      const nextDate = new Date(lastStart.getTime() + avg * 86400000);
+      const daysUntil = Math.round((nextDate - today) / 86400000);
+      document.getElementById('predictionCard').style.display = 'block';
+      document.getElementById('nextPeriodDate').textContent =
+        nextDate.toLocaleDateString('es-ES', { day:'numeric', month:'long' });
+      document.getElementById('nextPeriodDays').textContent =
+        daysUntil > 0 ? `En ${daysUntil} días` :
+        daysUntil === 0 ? '¡Hoy!' : `Hace ${Math.abs(daysUntil)} días`;
+
+      // Moon phase label
+      const pct = ((dayOfCycle - 1) / avg) * 100;
+      let label, emoji, sub;
+      if (pct < 16) { label = 'Menstruación'; emoji = '🌑'; sub = `Día ${dayOfCycle} de tu ciclo`; }
+      else if (pct < 35) { label = 'Fase folicular'; emoji = '🌒'; sub = 'Energía en aumento'; }
+      else if (pct < 55) { label = 'Ovulación'; emoji = '🌕'; sub = 'Máxima fertilidad'; }
+      else { label = 'Fase lútea'; emoji = '🌘'; sub = 'Fase de descanso'; }
+      document.getElementById('moonIcon').textContent = emoji;
+      document.getElementById('phaseLabel').textContent = label;
+      document.getElementById('phaseSub').textContent = sub;
+    } else {
+      document.getElementById('cycleLength').textContent = '28d';
+      document.getElementById('predictionCard').style.display = 'none';
+    }
+
+    // Period duration
+    if (last.end) {
+      const dur = Math.round((parseDate(last.end) - parseDate(last.start)) / 86400000) + 1;
+      document.getElementById('periodDuration').textContent = dur + 'd';
+    } else {
+      document.getElementById('periodDuration').textContent = '—';
+    }
+  }
+
+  // ── Calendar ──
+  const MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                     'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const DAYS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+  function changeMonth(d) { calMonth += d; if (calMonth > 11) { calMonth=0; calYear++; } else if (calMonth < 0) { calMonth=11; calYear--; } renderCalendar(); }
+
+  function renderCalendar() {
+    document.getElementById('calMonthTitle').textContent = `${MONTHS_ES[calMonth]} ${calYear}`;
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    DAYS_ES.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-weekday'; el.textContent = d; grid.appendChild(el);
+    });
+
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+    const prevDays = new Date(calYear, calMonth, 0).getDate();
+
+    // Period days set
+    const periodDays = new Set();
+    const ovulDays = new Set();
+    const fertilDays = new Set();
+
+    const avgCycle = getAvgCycle();
+
+    logs.forEach(log => {
+      const s = parseDate(log.start);
+      const e = log.end ? parseDate(log.end) : new Date(s.getTime() + 4*86400000);
+      for (let d = new Date(s); d <= e; d.setDate(d.getDate()+1)) {
+        periodDays.add(dateKey(d));
+      }
+      // Ovulation ~14 days before next period
+      const ovulDay = new Date(s.getTime() + (avgCycle - 14) * 86400000);
+      ovulDays.add(dateKey(ovulDay));
+      for (let i = -3; i <= 3; i++) {
+        const fd = new Date(ovulDay.getTime() + i*86400000);
+        if (!periodDays.has(dateKey(fd))) fertilDays.add(dateKey(fd));
+      }
+    });
+
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day other-month';
+      el.textContent = prevDays - firstDay + i + 1;
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = d;
+      const dateObj = new Date(calYear, calMonth, d);
+      const key = dateKey(dateObj);
+
+      if (periodDays.has(key)) el.classList.add('period');
+      else if (ovulDays.has(key)) el.classList.add('ovulation');
+      else if (fertilDays.has(key)) el.classList.add('fertile');
+
+      const todayKey = dateKey(today);
+      if (key === todayKey) el.classList.add('today');
+
+      grid.appendChild(el);
+    }
+
+    const remaining = 7 - ((firstDay + daysInMonth) % 7);
+    if (remaining < 7) {
+      for (let d = 1; d <= remaining; d++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day other-month'; el.textContent = d; grid.appendChild(el);
+      }
+    }
+  }
+
+  // ── History ──
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    if (logs.length === 0) {
+      list.innerHTML = '<div class="empty-state"><span class="emoji">🌙</span>Aún no hay registros</div>';
+      return;
+    }
+    const sorted = [...logs].reverse();
+    list.innerHTML = sorted.map(log => {
+      const startFmt = parseDate(log.start).toLocaleDateString('es-ES', { day:'numeric', month:'long', year:'numeric' });
+      const endFmt = log.end ? parseDate(log.end).toLocaleDateString('es-ES', { day:'numeric', month:'long' }) : '';
+      const dur = log.end ? Math.round((parseDate(log.end) - parseDate(log.start)) / 86400000) + 1 : null;
+      const syms = log.symptoms?.length ? log.symptoms.join(', ') : '';
+
+      return `<div class="history-item">
+        <div class="history-date">${startFmt}${endFmt ? ' → ' + endFmt : ''}</div>
+        <div class="history-meta">
+          ${dur ? `<span>${dur} días</span>` : ''}
+          <span class="history-tag">${log.flow || 'normal'}</span>
+          ${syms ? `<span>${syms}</span>` : ''}
+          ${log.notes ? `<span style="color:var(--text2)">"${log.notes}"</span>` : ''}
+        </div>
+        <button onclick="deleteLog(${log.id})" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;">✕</button>
+      </div>`;
+    }).join('');
+  }
+
+  function deleteLog(id) {
+    logs = logs.filter(l => l.id !== id);
+    save();
+    renderHistory();
+    updateHome();
+    showToast('Registro eliminado');
+  }
+
+  // ── Helpers ──
+  function save() {
+    localStorage.setItem('luna_logs', JSON.stringify(logs));
+    updateHome();
+  }
+
+  function parseDate(str) {
+    const [y,m,d] = str.split('-').map(Number);
+    return new Date(y, m-1, d);
+  }
+
+  function toInputDate(d) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function dateKey(d) {
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  }
+
+  function getAvgCycle() {
+    if (logs.length < 2) return 28;
+    let total = 0, count = 0;
+    for (let i = 1; i < logs.length; i++) {
+      const diff = (parseDate(logs[i].start) - parseDate(logs[i-1].start)) / 86400000;
+      if (diff > 14 && diff < 50) { total += diff; count++; }
+    }
+    return count > 0 ? Math.round(total / count) : 28;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Init calendar
+  renderCalendar();
+</script>
+</body>
+</html>
